@@ -2,6 +2,7 @@ import tensorflow as tf
 from mnist import MNIST
 import mnist
 import matplotlib.pyplot as plt
+import numpy as np
 data=MNIST()
 imgshape=data.img_shape
 weights=tf.Variable(tf.zeros([784,10]))
@@ -55,8 +56,18 @@ def prediction():
   feed={x:x_test}
   pr=sess.run(y_pred_cls,feed_dict=feed)
   return pr
-training(1000)
+def pltweights():
+  w=sess.run(weights)
+  fig,axe=plt.subplots(3,4)
+  wmax=np.max(w)
+  wmin=np.min(w)
+  for i,axe in enumerate(axe.flat):
+    if i<10:
+      image=w[:,i].reshape(img_shape)
+      axe.imshow(image,vmax=wmax,vmin=wmin,cmap='seismic')
+  plt.show()  
+training(5000)
 acce()
 pr=prediction()
-plotnumber(x_test[0:9],y_cls[0:9],pr[0:9])
-
+plotnumber(x_test[5:14],y_cls[5:14],pr[5:14])
+pltweights()
